@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -19,19 +20,33 @@ namespace ConsoleApplication1
             var json = "";
             var name = "";
             var value = "";
-                
 
-            using (WebClient wc = new WebClient())
+            while (true)
             {
-                json = wc.DownloadString("https://supercharger-e2f62.firebaseio.com/.json");
+                {
+                    using (WebClient wc = new WebClient())
+                    {
+                        json = wc.DownloadString("https://supercharger-e2f62.firebaseio.com/.json");
 
-                //Console.WriteLine(json);
+                        //Console.WriteLine(json);
 
-                dynamic results = JsonConvert.DeserializeObject<dynamic>(json);
-                
-                value = results.value;
+                        dynamic results = JsonConvert.DeserializeObject<dynamic>(json);
 
+                        value = results.value;
+
+                        var something = int.Parse(value);
+
+                        if (something > 1000)
+                        {
+                            Process.Start("D:\\irs.bat");
+                            break;
+                        }
+
+                    }
+                }
             }
+           
+          
 
             Console.WriteLine(name + value);
             Console.ReadLine();
